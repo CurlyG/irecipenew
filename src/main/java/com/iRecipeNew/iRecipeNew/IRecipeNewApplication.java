@@ -10,6 +10,6 @@ public class IRecipeNewApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(IRecipeNewApplication.class, args);
 
-}
+	}
 
 }
