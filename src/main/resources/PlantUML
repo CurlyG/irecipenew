@@ -1,41 +1,62 @@
 @startuml
 entity Recipe {
+    id Long
+    user_id Long
     name String,
     cuisine Cuisine,
     category Category,
     prepTimeInMin Integer,
     cookTimeInMin Integer,
     servings Integer,
-    source String,
     directions String,
     difficulty Difficulty,
 }
-entity Category {
-  departmentName String required
+entity User {
+  id Long
+  firstName String
+  lastName String
+  userName String
+  email String
 }
 
-entity Cuisine {
-  departmentName String required
+entity Comment{
+  id Long
+  recipe_id Long
+  text String
+  authorName String
 }
 
 entity Ingredient {
-  description String,
-  amount BigDecimal
+  id Long
+  recipe_id Long
+  quantity Integer
+  unitOfMeasure String
 }
-entity UnitOfMeasure {
-  uom String
-}
-entity Notes {
-  notes String
-}
+
+
 enum Difficulty {
   EASY, MODERATE, HARD
 }
 
-Recipe "1" <--> "1" Notes
+enum Category {
+MAIN DISHES, SIDE DISHES, BREAKFAST, SOUPS, SALADS,
+APPETIZERS, BEVERAGES,
+BREADS, ROLLS, DESSERTS
+}
+
+enum Cuisine {
+AMERICAN, ARMENIAN, ITALIAN,
+CHINESE, MEXICAN,
+INDIAN, JAPANESE, FRENCH,
+THAI, MEDITERRANEAN
+
+}
+
+Recipe "*" <--> "1" User
 Recipe "1" <--> "*" Ingredient
-Recipe "*" <--> "*" Category
-Recipe "*" <--> "*" Cuisine
+Recipe "1" <--> "*" Comment
+Recipe ---> Cuisine
 Recipe ---> Difficulty
-Ingredient "1" <--> "1" UnitOfMeasure
+Recipe ---> Category
+
 @enduml

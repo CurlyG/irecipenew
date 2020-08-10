@@ -5,24 +5,21 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
 
-
-
-@Entity
 @Data
-public class Ingredient {
+@Entity
+public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String unitOfMeasure;
+
+    private String text;
+    private String authorName;
 
 
-    @OneToMany(mappedBy = "ingredient")
-    List<RecipeIngredient> quantity;
-
-
-
+    @ManyToOne
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
 
 }

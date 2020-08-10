@@ -1,75 +1,25 @@
 package com.iRecipeNew.iRecipeNew.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
+@Data
 public class Cuisine {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String description;
+
+    private String name;
+
+    @OneToMany(mappedBy = "cuisine")
+    private List<Recipe> recipes;
 
 
-    public Cuisine(Long id, String description, Set<Recipe> recipes) {
-        this.id = id;
-        this.description = description;
-    }
-
-    public Cuisine() {
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-
-
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Cuisine)) return false;
-        final Cuisine other = (Cuisine) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$id = this.getId();
-        final Object other$id = other.getId();
-        if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description))
-            return false;
-
-        return true;
-    }
-
-    protected boolean canEqual(final Object other) {
-        return other instanceof Cuisine;
-    }
-
-    public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $id = this.getId();
-        result = result * PRIME + ($id == null ? 43 : $id.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-            return result;
-    }
-
-    public String toString() {
-        return "Cuisine(id=" + this.getId() + ", description=" + this.getDescription() + ", recipes=" +  ")";
-    }
 }
+
+
+

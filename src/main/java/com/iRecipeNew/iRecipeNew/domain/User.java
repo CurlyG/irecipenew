@@ -1,21 +1,32 @@
 package com.iRecipeNew.iRecipeNew.domain;
 
-
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
-public class  Category {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String firstName;
+    private String lastName;
+    private String userName;
+    private String email;
 
-    @OneToMany(mappedBy = "category")
+
+    @OneToMany(mappedBy = "user")
     private List<Recipe> recipes;
+
+
+
+
 }
+
+
+

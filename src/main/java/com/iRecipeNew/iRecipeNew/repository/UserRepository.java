@@ -1,8 +1,8 @@
 package com.iRecipeNew.iRecipeNew.repository;
 
-import com.iRecipeNew.iRecipeNew.domain.Recipe;
+import com.iRecipeNew.iRecipeNew.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
-public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 }
