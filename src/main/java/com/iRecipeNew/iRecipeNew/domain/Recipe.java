@@ -18,9 +18,11 @@ public class Recipe {
     private Long id;
 
     private String name;
-    private Integer prepTime;
-    private Integer cookTime;
+    private Integer prepTimeInMin;
+    private Integer cookTimeInMin;
     private Integer servings;
+
+    @Lob
     private String directions;
 
 
@@ -30,8 +32,8 @@ public class Recipe {
 
 
 
-//    @OneToMany(mappedBy = "recipe")
-//    private Set<RecipeIngredient> quantity;
+    @OneToMany(mappedBy = "recipe")
+    private Set<RecipeIngredient> quantity;
 
     @OneToMany(mappedBy = "recipe")
     private List<Comment> comments;
@@ -45,12 +47,23 @@ public class Recipe {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cuisine_id")
     private Cuisine cuisine;
 
 
+    public Recipe(){}
 
-
-
+    public Recipe(String name, Integer prepTimeInMin, Integer cookTimeInMin, Integer servings, String directions, Difficulty difficulty, List<Comment> comments, User user, Category category, Cuisine cuisine) {
+        this.name = name;
+        this.prepTimeInMin = prepTimeInMin;
+        this.cookTimeInMin = cookTimeInMin;
+        this.servings = servings;
+        this.directions = directions;
+        this.difficulty = difficulty;
+        this.comments = comments;
+        this.user = user;
+        this.category = category;
+        this.cuisine = cuisine;
+    }
 }

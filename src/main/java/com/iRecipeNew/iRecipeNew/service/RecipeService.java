@@ -12,9 +12,8 @@ public interface RecipeService {
     List<Recipe> getAllRecipes();
     Optional<Recipe> getRecipeById(Long id);
 
-    void updateRecipeById(Recipe recipe, Long id);
-    void replaceRecipeById(Recipe recipe, Long id);
-    void deleteRecipeById(Long id);
+    Recipe updateRecipeById(Long id, Recipe recipe);
+    boolean deleteRecipeById(Long id);
     void createRecipe(Recipe recipe);
 
 

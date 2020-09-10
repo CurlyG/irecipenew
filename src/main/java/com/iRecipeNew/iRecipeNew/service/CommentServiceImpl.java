@@ -15,15 +15,21 @@ public class CommentServiceImpl implements CommentService{
 
 
     @Override
-    public Optional<Comment> getCommentByRecipeId(Long id) {
+    public Optional<Comment> getCommentById(Long id) {
         return commentRepository.findById(id);
     }
 
     @Override
-    public void deleteCommentByRecipeId(Long id) {
-        commentRepository.deleteById(id);
+    public boolean deleteCommentId(Long id) {
+        if(commentRepository.existsById(id)){
+            commentRepository.deleteById(id);
+            return true;
+        }
 
+        return false;
     }
+
+
 
     @Override
     public void createComment(Comment comment) {

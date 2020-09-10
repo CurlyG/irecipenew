@@ -22,4 +22,9 @@ public class Comment {
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
+    public Comment(String text, String authorName, Recipe recipe) {
+        this.text = text;
+        this.authorName = authorName;
+        this.recipe = recipe;
+    }
 }

@@ -18,7 +18,10 @@ public class Cuisine {
     @OneToMany(mappedBy = "cuisine")
     private List<Recipe> recipes;
 
-
+    public Cuisine(String name, List<Recipe> recipes) {
+        this.name = name;
+        this.recipes = recipes;
+    }
 }
 
 

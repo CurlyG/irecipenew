@@ -7,9 +7,11 @@ import java.util.Optional;
 
 public interface CommentService {
 
-    Optional<Comment> getCommentByRecipeId(Long id);
+    Optional<Comment> getCommentById(Long id);
 
-    void deleteCommentByRecipeId(Long id);
+    boolean deleteCommentId(Long id);
+
+
     void createComment(Comment comment);
 
 
