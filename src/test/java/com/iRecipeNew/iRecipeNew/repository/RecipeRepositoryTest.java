@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -14,14 +16,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class RecipeRepositoryTest {
+
+   // Mockito
 
 //    private static Long id;
 //    private static String name;
@@ -53,14 +55,17 @@ public class RecipeRepositoryTest {
 //
 //    }
 
+
+
     @Autowired
     private TestEntityManager entityManager;
 
-    @Autowired
+    @InjectMocks
     private RecipeRepository recipeRepository;
 
     @Test
     public void should_find_no_recipes_if_repository_is_empty() {
+
         Iterable<Recipe> recipes = recipeRepository.findAll();
 
         assertThat(recipes).isEmpty();
@@ -69,6 +74,14 @@ public class RecipeRepositoryTest {
 
     @Test
     public void should_store_a_recipe() {
+
+        //@InjectMocks
+        //@InjectedMock private InvoiceDao invoiceDao;
+
+
+        //when.DAORepository.get
+
+
         Recipe recipe = recipeRepository.save(new Recipe("pizza", 15, 25, 6, "Place into the oven", difficulty, comments, user, category, cuisine ));
 
         assertThat(recipe).hasFieldOrPropertyWithValue("name", "pizza");

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 public class IRecipeNewApplication {
 
 	public static void main(String[] args) {
-		System.out.println("test");
 		SpringApplication.run(IRecipeNewApplication.class, args);
 
 	}

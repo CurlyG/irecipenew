@@ -1,7 +1,6 @@
 package com.iRecipeNew.iRecipeNew.service;
 
 import com.iRecipeNew.iRecipeNew.domain.Recipe;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
