@@ -81,12 +81,12 @@ public class RecipeControllerTest {
         MockMvc mvc = mockMvc;
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .get("http://localhost:8080/api/v1/recipes/56");
+                .get("http://localhost:8080/api/v1/recipes/2");
 
 
         mvc.perform(request.accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200))
-                .andExpect(MockMvcResultMatchers.content().string(containsString("56")));
+                .andExpect(MockMvcResultMatchers.content().string(containsString("2")));
     }
 
 
@@ -117,7 +117,7 @@ public class RecipeControllerTest {
         MockMvc mvc = mockMvc;
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .delete("http://localhost:8080/api/v1/recipes/56");
+                .delete("http://localhost:8080/api/v1/recipes/2");
 
         mvc.perform(request).andExpect(status().is(200));
     }
@@ -132,7 +132,7 @@ public class RecipeControllerTest {
         MockMvc mvc = mockMvc;
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .put("http://localhost:8080/api/v1/recipes/56")
+                .put("http://localhost:8080/api/v1/recipes/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(recipeJson());
 
@@ -148,7 +148,7 @@ public class RecipeControllerTest {
         MockMvc mvc = mockMvc;
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .patch("http://localhost:8080/api/v1/recipes/57")
+                .patch("http://localhost:8080/api/v1/recipes/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(recipeJson());
 
