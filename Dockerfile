@@ -1,19 +1,29 @@
 FROM jenkins/jenkins
-COPY target/iRecipeNew-0.0.1-SNAPSHOT.jar app.jar
+
+USER root
+
+# Install ansible
+RUN apt-get update && apt-get -y install ansible
+
+
+# Install Docker
+RUN apt-get update && \
+apt-get -y install apt-transport-https \
+     ca-certificates \
+     curl \
+     gnupg2 \
+     software-properties-common && \
+curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey && \
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
+   $(lsb_release -cs) \
+   stable" && \
+apt-get update && \
+apt-get -y install docker-ce
+
+# COmpose
 RUN curl -L "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+
+RUN usermod -aG docker jenkins
+
 USER jenkins
-
-
-#FROM adoptopenjdk/openjdk11:alpine-jre
-#ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait
-#RUN chmod +x /wait
-#ENTRYPOINT /wait && java -jar app.jar
-
-FROM openjdk:8-jre-alpine
-
-RUN mkdir /app
-
-COPY *.jar /app/app.jar
-
-CMD java -jar /app/app.jar
-

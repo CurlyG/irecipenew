@@ -18,7 +18,7 @@ pipeline {
 
             post {
                 success {
-                   archiveArtifacts artifacts: 'java-app/target/*.jar', fingerprint: true
+                   archiveArtifacts artifacts: 'iRecipeNew/target/*.jar', fingerprint: true
                 }
             }
         }
@@ -30,7 +30,7 @@ pipeline {
 
             post {
                 always {
-                    junit 'java-app/target/surefire-reports/*.xml'
+                    junit 'iRecipeNew/target/surefire-reports/*.xml'
                 }
             }
         }
@@ -41,10 +41,6 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                sh './jenkins/deploy/deploy.sh'
-            }
-        }
+
     }
 }

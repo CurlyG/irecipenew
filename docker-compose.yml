@@ -4,7 +4,7 @@ services:
     container_name: jenkins
     image: jenkins/docker
     build:
-      context: pipeline
+      context: jenkins
     ports:
       - "8080:8080"
     environment:
@@ -37,7 +37,7 @@ services:
     image: irecipenew
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: jenkins/build/Dockerfile
     restart: always
     ports:
       - 8080:8080
@@ -53,25 +53,25 @@ services:
       - network
 
 
-  remote_host:
-    container_name: remote-host
-    image: remote-host
-    build:
-      context: centos7
-    networks:
-      - net
-  git:
-    container_name: git-server
-    image: 'gitlab/gitlab-ee:latest'
-    hostname: 'gitlab.example.com'
-    ports:
-      - '8090:80'
-    volumes:
-      - '$GITLAB_HOME/config:/etc/gitlab'
-      - '$GITLAB_HOME/logs:/var/log/gitlab'
-      - '$GITLAB_HOME/data:/var/opt/gitlab'
-    networks:
-      - net
+#  remote_host:
+#    container_name: remote-host
+#    image: remote-host
+#    build:
+#      context: centos7
+#    networks:
+#      - net
+#  git:
+#    container_name: git-server
+#    image: 'gitlab/gitlab-ee:latest'
+#    hostname: 'gitlab.example.com'
+#    ports:
+#      - '8090:80'
+#    volumes:
+#      - '$GITLAB_HOME/config:/etc/gitlab'
+#      - '$GITLAB_HOME/logs:/var/log/gitlab'
+#      - '$GITLAB_HOME/data:/var/opt/gitlab'
+#    networks:
+#      - net
 volumes:
   db_data: {}
   db-list:
