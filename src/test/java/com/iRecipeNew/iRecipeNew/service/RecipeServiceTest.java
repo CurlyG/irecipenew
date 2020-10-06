@@ -1,166 +1,250 @@
 package com.iRecipeNew.iRecipeNew.service;
 
+import com.google.gson.Gson;
 import com.iRecipeNew.iRecipeNew.domain.*;
 import com.iRecipeNew.iRecipeNew.repository.RecipeRepository;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.swing.text.html.Option;
-import java.util.*;
-import static org.hamcrest.CoreMatchers.is;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
 public class RecipeServiceTest {
 
+    @Mock
+    private RecipeRepository recipeRepository;
 
     @InjectMocks
     private RecipeServiceImpl recipeService = new RecipeServiceImpl();
 
 
-    @Mock
-    private RecipeRepository recipeRepository;
 
-
-    private static Long id;
-    private static String name;
-    private static Integer prepTimeInMin;
-    private static Integer cookTimeInMin;
-    private static Integer servings;
-    private static String directions;
-    private static Difficulty difficulty;
-    private static List<Comment> comments;
-    private List<Recipe> recipes;
-    private static User user;
-    private static Category category;
-    private static Cuisine cuisine;
-    private static Recipe recipe;
-    private static ERole eRole;
-    private static Role role;
-
-
-//    @BeforeClass
-//    public static void setUpBeforeClass(){
-//        //setup difficulty
-//        difficulty = Difficulty.EASY;
-//
-//        //setup comment
-//        Comment comment1 = new Comment("Good recipe", "Ruzanna", recipe);
-//        Comment comment2 = new Comment("I love it", "Jack", recipe);
-//        comments.add(comment1);
-//        comments.add(comment2);
-//
-//        //setup user
-//        List<Recipe> recipes = new ArrayList<>();
-//        Set<Role> roles = new HashSet<Role>();
-//        user = new User("ruzanna@gmail.com", "Ruzanna", "pass", roles, recipes);
-//
-//        //setup cuisine
-//        cuisine = new Cuisine("American", recipes);
-//
-//        //setup recipe
-//        recipe = new Recipe("pizza", 15, 25, 6, "Place into the oven", difficulty, comments, user, category, cuisine );
-//        id =1L;
-//        recipe.setId(id);
-//    }
-
+    private List<Recipe> existingRecipes;
+    private Recipe recipe;
+    private Recipe updatedRecipe;
+    private String results;
+    private String result;
+    private String updatedResult;
+    private Gson gson;
 
         @BeforeEach
         public void setMockOutput() {
+                gson = new Gson();
 
-            Recipe recipe1 = new Recipe(1L, "pizza", 15, 25, 6, "Place into the oven", difficulty, comments, user, category, cuisine);
-            Recipe recipe2 = new Recipe(2L, "pasta", 35, 20, 2, "Put some butter", difficulty, comments, user, category, cuisine);
-            Recipe recipe3 = new Recipe(3L, "taco", 10, 30, 3, "Put your favorite spices", difficulty, comments, user, category, cuisine);
-            recipes = new ArrayList<>();
-            recipes.add(recipe1);
-            recipes.add(recipe2);
-            recipes.add(recipe3);
+            List<Comment> comments = new ArrayList<>();
+            Category category = new Category();
+            User user = new User();
+            Cuisine cuisin = new Cuisine();
 
-            when(recipeRepository.findAll()).thenReturn(recipes);
-            when(recipeRepository.findById(1L)).thenReturn(Optional.of(recipe1));
-            when(recipeRepository.findById(2L)).thenReturn(Optional.of(recipe2));
-            when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe1);
-            when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe2);
+                existingRecipes = new ArrayList<>();
+                recipe = new Recipe();
+                recipe.setName("Spaghetti");
+                recipe.setId(5L);
+                recipe.setCookTimeInMin(20);
+                recipe.setDifficulty(Difficulty.EASY);
+                recipe.setDirections("Place into the oven");
+                recipe.setPrepTimeInMin(15);
+                recipe.setServings(3);
+                recipe.setComments(comments);
+                recipe.setCategory(category);
+                recipe.setUser(user);
+                recipe.setCuisine(cuisin);
+                existingRecipes.add(recipe);
+                results = gson.toJson(existingRecipes);
+                result = gson.toJson(recipe);
+
+                updatedRecipe = new Recipe();
+                updatedRecipe.setName("Macaroni");
+                updatedRecipe.setId(4L);
+                updatedRecipe.setCookTimeInMin(40);
+                updatedRecipe.setDifficulty(Difficulty.HARD);
+                updatedRecipe.setDirections("Place into the oven");
+                updatedRecipe.setPrepTimeInMin(25);
+                updatedRecipe.setServings(6);
+                updatedRecipe.setComments(comments);
+                updatedRecipe.setCategory(category);
+                updatedRecipe.setUser(user);
+                updatedRecipe.setCuisine(cuisin);
+                updatedResult = gson.toJson(updatedRecipe);
+
+
+            when(recipeRepository.findAll()).thenReturn(existingRecipes);
+            when(recipeRepository.findById(5L)).thenReturn(Optional.of(recipe));
+            when(recipeRepository.findById(4L)).thenReturn(Optional.of(updatedRecipe));
+            when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe);
+            when(recipeRepository.save(any(Recipe.class))).thenReturn(updatedRecipe);
+
 
         }
 
         @Test
         public void getAllRecipesTest(){
-//            Recipe recipe1 = new Recipe(1L, "pizza", 15, 25, 6, "Place into the oven", difficulty, comments, user, category, cuisine);
-//            Recipe recipe2 = new Recipe(2L, "pasta", 35, 20, 2, "Put some butter", difficulty, comments, user, category, cuisine);
-//            Recipe recipe3 = new Recipe(3L, "taco", 10, 30, 3, "Put your favorite spices", difficulty, comments, user, category, cuisine);
-//           List<Recipe> recipes = new ArrayList<>();
-//            recipes.add(recipe1);
-//            recipes.add(recipe2);
-//            recipes.add(recipe3);
-            assertEquals(3, recipeService.getAllRecipes().size());
+
+            assertEquals(1, recipeService.getAllRecipes().size());
 
         }
 
     @Test
     public void getRecipeByIdTest(){
-        Optional<Recipe> recipe1 = Optional.of(new Recipe(1L, "pizza", 15, 25, 6, "Place into the oven", difficulty, comments, user, category, cuisine));
-        assertEquals(recipe1, recipeService.getRecipeById(1L));
+        assertEquals(Optional.of(recipe), recipeService.getRecipeById(5L));
 
 
-        Optional<Recipe> test = recipeService.getRecipeById(1L);
+        Optional<Recipe> test = recipeService.getRecipeById(5L);
         assert(test.isPresent());
 
     }
 
     @Test
     public void updateRecipeByIdTest(){
-        Recipe recipe1 =  recipeService.getRecipeById(1L).get();
-        Recipe recipe2 =  recipeService.getRecipeById(2L).get();
 
-       recipeService.updateRecipeById(1L, recipe2);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
 
-        assert(recipeService.getRecipeById(1L).get().getName().equals(recipe2.getName()));
+        assert(recipeService.getRecipeById(5L).get().getName().equals(updatedRecipe.getName()));
+   }
+
+    @Test
+    public void updateRecipeByIdWhenCuisineIsNullTest(){
+
+        updatedRecipe.setCuisine(null);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
+
+        assert(recipeService.getRecipeById(5L).get().getName().equals(updatedRecipe.getName()));
+    }
+
+    @Test
+    public void updateRecipeByIdWhenCategoryIsNullTest(){
+
+        updatedRecipe.setCategory(null);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
+
+        assert(recipeService.getRecipeById(5L).get().getName().equals(updatedRecipe.getName()));
+    }
+
+    @Test
+    public void updateRecipeByIdWhenCommentIsNullTest(){
+
+        updatedRecipe.setComments(null);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
+
+        assert(recipeService.getRecipeById(5L).get().getName().equals(updatedRecipe.getName()));
+    }
+
+    @Test
+    public void updateRecipeByIdWhenDifficultyIsNullTest(){
+
+        updatedRecipe.setDifficulty(null);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
+
+        assert(recipeService.getRecipeById(5L).get().getName().equals(updatedRecipe.getName()));
+    }
+
+    @Test
+    public void updateRecipeByIdWhenCookTimeIsNullTest(){
+
+        updatedRecipe.setCookTimeInMin(null);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
+
+        assert(recipeService.getRecipeById(5L).get().getName().equals(updatedRecipe.getName()));
+    }
+
+    @Test
+    public void updateRecipeByIdWhenDirectionsIsNullTest(){
+
+        updatedRecipe.setDirections(null);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
+
+        assert(recipeService.getRecipeById(5L).get().getName().equals(updatedRecipe.getName()));
+    }
+
+    @Test
+    public void updateRecipeByIdWhenPrepTimeIsNullTest(){
+
+        updatedRecipe.setPrepTimeInMin(null);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
+
+        assert(recipeService.getRecipeById(5L).get().getName().equals(updatedRecipe.getName()));
+    }
+
+    @Test
+    public void updateRecipeByIdWhenServingsIsNullTest(){
+
+        updatedRecipe.setServings(null);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
+
+        assert(recipeService.getRecipeById(5L).get().getName().equals(updatedRecipe.getName()));
+    }
+
+    @Test
+    public void updateRecipeByIdWhenUserIsNullTest(){
+
+        updatedRecipe.setUser(null);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
+
+        assert(recipeService.getRecipeById(5L).get().getName().equals(updatedRecipe.getName()));
+    }
+
+    @Test
+    public void updateRecipeByIdWhenNameIsNullTest(){
+
+        updatedRecipe.setName(null);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
+
+        assert(recipeService.getRecipeById(5L).get().getServings().equals(updatedRecipe.getServings()));
+    }
+
+    @Test
+    public void updateRecipeByIdWhenIdIsNullTest(){
+
+        updatedRecipe.setId(null);
+        recipeService.getRecipeById(5L);
+        recipeService.updateRecipeById(5L, updatedRecipe);
+
+        assert(recipeService.getRecipeById(5L).get().getServings().equals(updatedRecipe.getServings()));
+    }
 
 
 
+    @Test
+    public void deleteRecipeByIdTest(){
+        given(recipeService.deleteRecipeById(5L)).willReturn(true);
+
+            recipeService.deleteRecipeById(5L);
+            verify(recipeRepository, times(1)).deleteById(5L);
 
     }
 
-//    @Test
-//    public void deleteRecipeByIdTest(){
-//        Recipe recipe1 = new Recipe(1L, "pizza", 15, 25, 6, "Place into the oven", difficulty, comments, user, category, cuisine);
-//
-//
-//        doAnswer((arguments) -> {
-//            assertEquals(recipe1, arguments.getArgument(0));
-//            return null;
-//        }).when(recipeRepository).deleteById(1L);
-//        recipeService.deleteRecipeById(1L);
-//
-//        verify(recipeRepository, times(1)).deleteById(1L);
-//
-//
-//    }
-
     @Test
     public void createRecipeTest(){
-        Recipe recipe1 = new Recipe(1L, "pizza", 15, 25, 6, "Place into the oven", difficulty, comments, user, category, cuisine);
-
 
         doAnswer((arguments) -> {
-            assertEquals(recipe1, arguments.getArgument(0));
+            assertEquals(recipe, arguments.getArgument(0));
             return null;
         }).when(recipeRepository).save(any(Recipe.class));
-        recipeService.createRecipe(recipe1);
+        recipeService.createRecipe(recipe);
 
-        verify(recipeRepository, times(1)).save(recipe1);
-
+        verify(recipeRepository, times(1)).save(recipe);
 
     }
 

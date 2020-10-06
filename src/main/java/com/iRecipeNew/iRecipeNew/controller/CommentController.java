@@ -1,10 +1,7 @@
 package com.iRecipeNew.iRecipeNew.controller;
 
 import com.iRecipeNew.iRecipeNew.domain.Comment;
-import com.iRecipeNew.iRecipeNew.domain.Recipe;
-import com.iRecipeNew.iRecipeNew.errors.RecipeNotFoundError;
 import com.iRecipeNew.iRecipeNew.service.CommentService;
-import com.iRecipeNew.iRecipeNew.service.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +27,21 @@ public class CommentController {
         this.commentService = commentService;
     }
 
+    @GetMapping()
+    public List<Comment> getComments(){
+
+        return commentService.getAllComments();
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public String createComment(@RequestBody Comment comment){
+
+        this.commentService.createComment(comment);
+
+        return "Comment sucessfully created!";
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Comment>> getCommentById(@PathVariable(required = true) long id){
         Optional<Comment> comment = this.commentService.getCommentById(id);
@@ -46,7 +58,7 @@ public class CommentController {
     public ResponseEntity<String> deleteCommentById(@PathVariable long id){
 
         if (this.commentService.deleteCommentId(id)){
-            return ResponseEntity.ok().body("Comment successfully deleted!");
+            return ResponseEntity.noContent().build();
         }else{
             return ResponseEntity.notFound().build();
         }

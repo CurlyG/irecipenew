@@ -1,8 +1,6 @@
 package com.iRecipeNew.iRecipeNew.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.Set;
 
 
 @Entity
-@Data
+@Getter
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +20,6 @@ public class Ingredient {
     @OneToMany(mappedBy = "ingredient")
     List<RecipeIngredient> quantity;
 
-
-
-
+    public Ingredient() {
+    }
 }

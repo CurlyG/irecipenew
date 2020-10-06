@@ -20,6 +20,7 @@
 //import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.web.bind.annotation.*;
+//import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 //
 //import javax.validation.Valid;
 //import java.util.HashSet;
@@ -30,8 +31,8 @@
 //@CrossOrigin(origins = "*", maxAge = 3600)
 //@Slf4j
 //@RestController
-//@RequestMapping("/api/auth")
-//public class AuthController {
+//@RequestMapping("api/auth")
+//public class AuthController  {
 //    @Autowired
 //    AuthenticationManager authenticationManager;
 //

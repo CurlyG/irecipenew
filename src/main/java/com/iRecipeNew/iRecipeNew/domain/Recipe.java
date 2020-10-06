@@ -1,9 +1,8 @@
 package com.iRecipeNew.iRecipeNew.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,10 +10,12 @@ import java.util.Objects;
 import java.util.Set;
 
 
-@EqualsAndHashCode
 @Entity
-@Data
+@Getter
+@Setter
+@JsonIgnoreProperties({"role", "quantity", "user", "category", "cuisine"})
 public class Recipe {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id")
@@ -68,31 +69,6 @@ public class Recipe {
 
     public Recipe(){}
 
-    public Recipe(Long id, String name, Integer prepTimeInMin, Integer cookTimeInMin, Integer servings, String directions, Difficulty difficulty, List<Comment> comments, User user, Category category, Cuisine cuisine) {
-        this.id = id;
-        this.name = name;
-        this.prepTimeInMin = prepTimeInMin;
-        this.cookTimeInMin = cookTimeInMin;
-        this.servings = servings;
-        this.directions = directions;
-        this.difficulty = difficulty;
-        this.comments = comments;
-        this.user = user;
-        this.category = category;
-        this.cuisine = cuisine;
-    }
-    public Recipe(String name, Integer prepTimeInMin, Integer cookTimeInMin, Integer servings, String directions, Difficulty difficulty, List<Comment> comments, User user, Category category, Cuisine cuisine) {
-        this.name = name;
-        this.prepTimeInMin = prepTimeInMin;
-        this.cookTimeInMin = cookTimeInMin;
-        this.servings = servings;
-        this.directions = directions;
-        this.difficulty = difficulty;
-        this.comments = comments;
-        this.user = user;
-        this.category = category;
-        this.cuisine = cuisine;
-    }
 
 
 }

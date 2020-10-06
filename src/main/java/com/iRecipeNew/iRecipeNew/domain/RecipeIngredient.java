@@ -1,12 +1,13 @@
 package com.iRecipeNew.iRecipeNew.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 //Using this composite key class(RecipeIngredientKey), I create the entity class, which models the join table
 @Entity
-@Data
 public class RecipeIngredient {
 
     @EmbeddedId //to mark primary key
@@ -25,9 +26,5 @@ public class RecipeIngredient {
 
 
     int quantity;
-
-    public RecipeIngredient() {
-    }
-
 
 }

@@ -1,12 +1,14 @@
 package com.iRecipeNew.iRecipeNew.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
 public class Cuisine {
 
     @Id
@@ -18,10 +20,10 @@ public class Cuisine {
     @OneToMany(mappedBy = "cuisine")
     private List<Recipe> recipes;
 
-    public Cuisine(String name, List<Recipe> recipes) {
-        this.name = name;
-        this.recipes = recipes;
-    }
+
+
+    public Cuisine(){}
+
 }
 
 

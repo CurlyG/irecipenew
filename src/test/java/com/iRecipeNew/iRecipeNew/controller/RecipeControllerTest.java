@@ -1,32 +1,32 @@
 package com.iRecipeNew.iRecipeNew.controller;
 
+import com.google.gson.Gson;
+import com.iRecipeNew.iRecipeNew.domain.Comment;
+import com.iRecipeNew.iRecipeNew.domain.Difficulty;
+import com.iRecipeNew.iRecipeNew.domain.Recipe;
 import com.iRecipeNew.iRecipeNew.repository.RecipeRepository;
 import com.iRecipeNew.iRecipeNew.service.RecipeServiceImpl;
-import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import javax.persistence.Id;
-import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -35,126 +35,159 @@ public class RecipeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @InjectMocks
-    private RecipeServiceImpl recipeService = new RecipeServiceImpl();
-
-
     @Mock
     private RecipeRepository recipeRepository;
 
-    private String recipeJson() {
-        return ("{" +
-                "\"id\": " + 30 + "," +
-                "\"name\": \"" + "pizza" + "\"," +
-                "\"prepTimeInMin\": " + 30 + "," +
-                "\"cookTimeInMin\": " + 10 + "," +
-                "\"servings\": " + 6 + "," +
-                "\"directions\": \"" + "Place into the oven" + "\"," +
-                "\"difficulty\": \"" + "EASY" + "\"," +
-                "\"quantity\": " + "[]" + "," +
-                "\"comments\": " + "[]" + "," +
-                "\"user\": " + null + "," +
-                "\"category\": " + null + "," +
-                "\"cuisine\": " + null +
-                "}");
+    @MockBean
+    private RecipeServiceImpl recipeService;
+
+    @Test
+    void injectedComponentsAreNotNull(){
+        assertThat(recipeRepository).isNotNull();
+        assertThat(recipeService).isNotNull();
     }
 
 
+    private List<Recipe> existingRecipes;
+    private Recipe recipe;
+    private Recipe updatedRecipe;
+    private String results;
+    private String result;
+    private String updatedResult;
+    private Gson gson;
+
+    @BeforeEach
+    public void setUpBeforeClass() {
+
+        List<Comment> comments = new ArrayList<>();
+      //  Category category = new Category();
+     //   User user = new User();
+      //  Cuisine cuisin = new Cuisine();
+        gson = new Gson();
+
+        existingRecipes = new ArrayList<>();
+        recipe = new Recipe();
+        recipe.setName("Spaghetti");
+        recipe.setId(5L);
+        recipe.setCookTimeInMin(20);
+        recipe.setDifficulty(Difficulty.EASY);
+        recipe.setDirections("Place into the oven");
+        recipe.setPrepTimeInMin(15);
+        recipe.setServings(3);
+        recipe.setComments(comments);
+      //  recipe.setCategory(category);
+       // recipe.setUser(user);
+      //  recipe.setCuisine(cuisin);
+        existingRecipes.add(recipe);
+        results = gson.toJson(existingRecipes);
+        result = gson.toJson(recipe);
+
+        updatedRecipe = new Recipe();
+        updatedRecipe.setName("Macaroni");
+        updatedRecipe.setId(4L);
+        updatedRecipe.setCookTimeInMin(40);
+        updatedRecipe.setDifficulty(Difficulty.HARD);
+        updatedRecipe.setDirections("Place into the oven");
+        updatedRecipe.setPrepTimeInMin(25);
+        updatedRecipe.setServings(6);
+        updatedRecipe.setComments(comments);
+     //   updatedRecipe.setCategory(category);
+    //    updatedRecipe.setUser(user);
+     //   updatedRecipe.setCuisine(cuisin);
+        updatedResult = gson.toJson(updatedRecipe);
+
+
+   }
+
     @Test
-    @WithMockUser
     public void getRecipesTest() throws Exception {
+       given(recipeService.getAllRecipes()).willReturn(existingRecipes);
 
-        MockMvc mvc = mockMvc;
+        mockMvc.perform(
+                get("http://localhost:8080/api/v1/recipes").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(results));
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .get("http://localhost:8080/api/v1/recipes");
-
-        mvc.perform(request.accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(200))
-                .andExpect(MockMvcResultMatchers.content().string(containsString("cake")));
     }
 
+
     @Test
-    @WithMockUser
     public void getRecipesByIdTest() throws Exception {
+    given(recipeService.getRecipeById(5L)).willReturn(Optional.of(recipe));
 
-        MockMvc mvc = mockMvc;
+    mockMvc.perform(get("http://localhost:8080/api/v1/recipes/5").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().string(result));
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .get("http://localhost:8080/api/v1/recipes/2");
-
-
-        mvc.perform(request.accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(200))
-                .andExpect(MockMvcResultMatchers.content().string(containsString("2")));
     }
 
+    @Test
+    public void getRecipesByIncorrectIdTest() throws Exception {
+        given(recipeService.getRecipeById(5L)).willReturn(Optional.of(recipe));
 
-        @Test
-        @WithMockUser
-        @Transactional
-        public void createRecipesTest() throws Exception {
-
-        MockMvc mvc = mockMvc;
-
-            MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                    .post("http://localhost:8080/api/v1/recipes").
-                    contentType(MediaType.APPLICATION_JSON)
-                    .content(recipeJson());
-
-
-            mvc.perform(request.accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().is(201));
+        mockMvc.perform(get("http://localhost:8080/api/v1/recipes/4").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
 
     }
 
 
     @Test
-    @WithMockUser
-    @Transactional
+    public void createRecipesTest() throws Exception{
+
+        mockMvc.perform(post("http://localhost:8080/api/v1/recipes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(result))
+                .andExpect(status().isCreated());
+
+    }
+
+
+    @Test
     public void deleteRecipeByIdTest() throws Exception {
+        given(recipeService.deleteRecipeById(5L)).willReturn(true);
+        mockMvc.perform(delete("http://localhost:8080/api/v1/recipes/5")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
 
-        MockMvc mvc = mockMvc;
-
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .delete("http://localhost:8080/api/v1/recipes/2");
-
-        mvc.perform(request).andExpect(status().is(200));
     }
 
+    @Test
+    public void deleteRecipeByIncorrectIdTest() throws Exception {
+        given(recipeService.deleteRecipeById(11L)).willReturn(false);
+        mockMvc.perform(delete("http://localhost:8080/api/v1/recipes/11")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
 
+    }
 
     @Test
-    @WithMockUser
-    @Transactional
     public void putRecipeByIdTest() throws Exception {
+        given(recipeService.getRecipeById(5L)).willReturn(Optional.of(recipe));
 
-        MockMvc mvc = mockMvc;
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .put("http://localhost:8080/api/v1/recipes/2")
+        mockMvc.perform(put("http://localhost:8080/api/v1/recipes/5")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(recipeJson());
+                .content(updatedResult))
+                .andExpect(content().string("Recipe successfully updated"));
 
-        mvc.perform(request.accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(200));
     }
 
     @Test
-    @WithMockUser
-    @Transactional
-    public void patchRecipeByIdTest() throws Exception {
+    public void putRecipeByIncorrectIdTest() throws Exception {
+        given(recipeService.getRecipeById(55L)).willReturn(Optional.of(recipe));
 
-        MockMvc mvc = mockMvc;
-
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .patch("http://localhost:8080/api/v1/recipes/2")
+        mockMvc.perform(put("http://localhost:8080/api/v1/recipes/5")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(recipeJson());
-
-        mvc.perform(request.accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(200));
+                .content(updatedResult))
+                .andExpect(status().isNotFound());
 
     }
+
+
+
+
+
+
+
 
 }

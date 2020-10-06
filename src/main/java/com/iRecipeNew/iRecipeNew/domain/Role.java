@@ -1,11 +1,16 @@
 package com.iRecipeNew.iRecipeNew.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Role {
 
     @Id
@@ -17,7 +22,4 @@ public class Role {
 
     public Role(){}
 
-    public Role(ERole name) {
-        this.name = name;
-    }
 }

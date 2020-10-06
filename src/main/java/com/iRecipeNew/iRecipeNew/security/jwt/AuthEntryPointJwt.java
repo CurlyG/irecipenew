@@ -13,7 +13,6 @@
 //import java.io.IOException;
 //
 //@Component
-//@Slf4j
 //public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 //
 //    private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
@@ -24,5 +23,7 @@
 //        logger.error("Unauthorized error: {}", authException.getMessage());
 //        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
 //    }
+//
+//
 //
 //}

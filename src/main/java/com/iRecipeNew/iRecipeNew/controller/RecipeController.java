@@ -1,14 +1,11 @@
 package com.iRecipeNew.iRecipeNew.controller;
 
 import com.iRecipeNew.iRecipeNew.domain.Recipe;
-import com.iRecipeNew.iRecipeNew.errors.RecipeNotFoundError;
-import com.iRecipeNew.iRecipeNew.repository.RecipeRepository;
 import com.iRecipeNew.iRecipeNew.service.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +60,7 @@ public class RecipeController {
     public ResponseEntity<String> deleteRecipeById(@PathVariable long id){
 
         if (this.recipeService.deleteRecipeById(id)){
-            return ResponseEntity.ok().body("Recipe successfully deleted!");
+            return ResponseEntity.noContent().build();
         }else{
             return ResponseEntity.notFound().build();
         }
@@ -80,20 +77,6 @@ public class RecipeController {
             return ResponseEntity.ok().body("Recipe successfully updated");
         }
    }
-
-    @PatchMapping("/{id}")
-    @ResponseStatus(value= HttpStatus.ACCEPTED)
-    public ResponseEntity<String> patchRecipeById(@PathVariable long id, @RequestBody Recipe recipe) {
-
-        if (!recipeService.getRecipeById(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            this.recipeService.updateRecipeById(id, recipe);
-            return ResponseEntity.ok().body("User successfully updated");
-        }
-    }
-
-
 
 
 

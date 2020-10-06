@@ -10,8 +10,9 @@
 //@CrossOrigin(origins = "*", maxAge = 3600)
 //@RestController
 //@Slf4j
-//@RequestMapping("/api/test")
+//@RequestMapping("api/test")
 //public class TestController {
+//
 //    @GetMapping("/all")
 //    public String allAccess() {
 //        return "Public Content.";

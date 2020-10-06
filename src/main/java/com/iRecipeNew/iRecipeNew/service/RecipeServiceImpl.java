@@ -2,12 +2,10 @@ package com.iRecipeNew.iRecipeNew.service;
 
 
 import com.iRecipeNew.iRecipeNew.domain.Recipe;
-import com.iRecipeNew.iRecipeNew.errors.RecipeNotFoundError;
 import com.iRecipeNew.iRecipeNew.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +35,9 @@ public class RecipeServiceImpl implements RecipeService {
         Recipe updatedRecipe = getRecipeById(id).get();
 
 
-        if(recipe.getId()!=null){
+        if(recipe.getId()!=null) {
             updatedRecipe.setId(recipe.getId());
+
         }if(recipe.getCategory()!=null){
             updatedRecipe.setCategory(recipe.getCategory());
         }if(recipe.getComments()!=null){

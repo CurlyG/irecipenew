@@ -15,13 +15,14 @@
 //
 //    private static final long serialVersionUID = 1L;
 //
+//
 //    private Long id;
 //
 //    private String username;
 //
-//    private String firstname;
-//
-//    private String lastname;
+////    private String firstname;
+////
+////    private String lastname;
 //
 //    private String email;
 //

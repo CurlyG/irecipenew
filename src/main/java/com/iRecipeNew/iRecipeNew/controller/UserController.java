@@ -1,11 +1,11 @@
 package com.iRecipeNew.iRecipeNew.controller;
 
 
-import com.iRecipeNew.iRecipeNew.domain.Recipe;
 import com.iRecipeNew.iRecipeNew.domain.User;
-import com.iRecipeNew.iRecipeNew.errors.RecipeNotFoundError;
 import com.iRecipeNew.iRecipeNew.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +19,8 @@ import java.util.Optional;
 @Slf4j
 @RequestMapping("api/v1/users")
 public class UserController {
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
+
 
     @Autowired
     UserService userService;
@@ -27,7 +29,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("")
+    @GetMapping()
     public List<User> getUsers(){
         return userService.getAllUsers();
     }
@@ -44,7 +46,7 @@ public class UserController {
     }
 
 
-    @PostMapping("")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public String createUser(@RequestBody User user){
 
@@ -59,7 +61,7 @@ public class UserController {
     public ResponseEntity<String> deleteUserById(@PathVariable long id){
 
         if (this.userService.deleteUserById(id)){
-            return ResponseEntity.ok().body("User successfully deleted!");
+            return ResponseEntity.noContent().build();
         }else{
             return ResponseEntity.notFound().build();
         }
