@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @SpringBootApplication
 //@ComponentScan//({ "com.iRecipeNew.iRecipeNew.controller.CategoryController, com.iRecipeNew.iRecipeNew.controller.CommentController, com.iRecipeNew.iRecipeNew.controller.RecipeController, com.iRecipeNew.iRecipeNew.controller.UserController"})
-public class IRecipeNewApplication {
+	public class IRecipeNewApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(IRecipeNewApplication.class, args);
