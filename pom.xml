@@ -8,10 +8,10 @@
 		<version>2.3.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.iRecipeNew</groupId>
-	<artifactId>iRecipeNew</artifactId>
+	<groupId>com.irecipenew</groupId>
+	<artifactId>irecipenew</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>iRecipeNew</name>
+	<name>irecipenew</name>
 	<description>iRecipe application</description>
 
 	<properties>
